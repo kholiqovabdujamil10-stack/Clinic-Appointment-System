@@ -99,30 +99,40 @@ def doctor_info(request, pk):
 
 
 # Доступ к странице только для авторизованных пользователей
+# Доступ к странице только для авторизованных пользователей
 @login_required
 def create_appointment(request, pk):
+
     # Получаем врача по ID или возвращаем ошибку 404
     doctor = get_object_or_404(Doctor, pk=pk)
+
     # Проверяем, отправлена ли форма
     if request.method == 'POST':
+
         # Получаем дату и причину обращения из формы
         date = request.POST.get('appointment_date', '').strip()
         reason = request.POST.get('reason', '').strip()
+
         # Проверяем, заполнены ли все поля
         if not date or not reason:
             return render(request, 'clinic/book_appointment.html', {'doctor': doctor, 'error': 'Заполните все поля!'})
+
         # Проверяем формат даты и преобразуем строку в объект datetime
         try:
             date = datetime.strptime(date, '%Y-%m-%dT%H:%M')
         except ValueError:
             return render(request, 'clinic/book_appointment.html', {'doctor': doctor, 'error': 'Неправильный формат даты!'})
+
         # Проверяем, занято ли выбранное время у этого врача
         if Appointment.objects.filter(doctor_id=doctor, appointment_date=date, status__in=['Pending', 'Confirmed']).exists():
             return render(request, 'clinic/book_appointment.html', {'doctor': doctor, 'error': 'Это время уже занято!'})
+
         # Создаём новую запись на приём к врачу
         Appointment.objects.create(patient_id=request.user, doctor_id=doctor, appointment_date=date, reason=reason)
+
         # Перенаправляем пользователя на страницу его записей
         return redirect('my_appointments')
+
     # Если форма ещё не отправлена, отображаем страницу записи
     return render(request, 'clinic/book_appointment.html', {'doctor': doctor})
 
