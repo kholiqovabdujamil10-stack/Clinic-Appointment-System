@@ -90,7 +90,7 @@
     <form method="GET" class="doctor-search-form">
         <div class="search-box">
             <span>⌕</span>
-            <input type="text" name="q" value="{{ query }}" placeholder="Поиск врача..." class="search-input">
+            <input type="text" name="query" value="{{ query }}" placeholder="Поиск врача..." class="search-input">
         </div>
 
         <select name="specialization" class="filter-select">
@@ -205,5 +205,15 @@
     </div>
     <a href="#doctors" class="banner-button">Выбрать врача →</a>
 </section>
+
+{% if request.GET.query or request.GET.specialization or request.GET.sort %}
+<script>
+    window.addEventListener('load', function() {
+        document.getElementById('doctors').scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+</script>
+{% endif %}
 
 {% endblock %}
