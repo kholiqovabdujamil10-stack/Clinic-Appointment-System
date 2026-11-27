@@ -1,0 +1,73 @@
+{% extends 'clinic/base.html' %}
+
+{% block title %}Кабинет врача | Clinic{% endblock %}
+
+{% block content %}
+
+<section class="doctor-profile-section">
+
+    <div class="doctor-profile-card">
+
+        <img src="{{ doctor.image.url }}" alt="{{ doctor.name }}" class="doctor-profile-image">
+
+        <h1 class="doctor-profile-name">{{ doctor.name }}</h1>
+
+        <p class="doctor-profile-specialization">Специализация: {{ doctor.specialization_id.name }}</p>
+
+        <p class="doctor-profile-experience">Опыт: {{ doctor.experience }} лет</p>
+
+        <p class="doctor-profile-description">{{ doctor.description }}</p>
+
+        <a href="{% url 'edit_doctor' %}" class="edit-doctor-button">Изменить информацию</a>
+
+    </div>
+
+    <div class="doctor-appointments">
+
+        <h2 class="appointments-title">Записи пациентов</h2>
+
+        {% for appointment in appointments %}
+
+        <div class="doctor-appointment-card">
+
+            <h3 class="patient-name">{{ appointment.patient_id.username }}</h3>
+
+            <p class="patient-email">Email: {{ appointment.patient_id.email }}</p>
+
+            <p class="appointment-date">Дата: {{ appointment.appointment_date }}</p>
+
+            <p class="appointment-reason">Причина: {{ appointment.reason }}</p>
+
+            <p class="appointment-status">Статус: {{ appointment.status }}</p>
+
+            {% if appointment.status == 'Pending' %}
+
+            <form method="POST" action="{% url 'change_appointment_status' appointment.id %}"
+                class="appointment-status-form">
+                {% csrf_token %}
+
+                <button type="submit" name="status" value="Confirmed" class="confirm-button">
+                    Подтвердить
+                </button>
+
+                <button type="submit" name="status" value="Cancelled" class="cancel-button">
+                    Отменить
+                </button>
+
+            </form>
+
+            {% endif %}
+
+        </div>
+
+        {% empty %}
+
+        <p class="empty-message">Пока нет записей от пациентов.</p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

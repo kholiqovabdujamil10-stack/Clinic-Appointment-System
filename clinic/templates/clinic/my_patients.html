@@ -1,0 +1,39 @@
+{% extends 'clinic/base.html' %}
+
+{% block title %}Мои пациенты | Clinic{% endblock %}
+
+{% block content %}
+
+<section class="patients-section">
+
+    <h1 class="page-title">Мои пациенты</h1>
+
+    <div class="patients-list">
+
+        {% for appointment in appointments %}
+
+        <div class="patient-card">
+
+            <h2 class="patient-name">{{ appointment.patient_id.username }}</h2>
+
+            <p class="patient-email">Email: {{ appointment.patient_id.email }}</p>
+
+            <p class="patient-date">Дата приёма: {{ appointment.appointment_date }}</p>
+
+            <p class="patient-reason">Причина: {{ appointment.reason }}</p>
+
+            <p class="patient-status">Статус: {{ appointment.status }}</p>
+
+        </div>
+
+        {% empty %}
+
+        <p class="empty-message">У вас пока нет пациентов.</p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

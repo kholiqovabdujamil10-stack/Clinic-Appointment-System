@@ -1,0 +1,83 @@
+{% extends 'clinic/base.html' %}
+
+{% block title %}Информация о враче | Clinic{% endblock %}
+
+{% block content %}
+
+<section class="doctor-detail-section">
+
+    <div class="doctor-detail-card">
+
+        <img src="{{ doctor.image.url }}" alt="{{ doctor.name }}" class="doctor-detail-image">
+
+        <div class="doctor-detail-info">
+
+            <h1 class="doctor-detail-name">{{ doctor.name }}</h1>
+
+            <p class="doctor-detail-specialization">
+                Специализация: {{ doctor.specialization_id.name }}
+            </p>
+
+            <p class="doctor-detail-experience">
+                Опыт работы: {{ doctor.experience }} лет
+            </p>
+
+            <p class="doctor-detail-description">
+                {{ doctor.description }}
+            </p>
+
+            {% if user.is_authenticated %}
+            <a href="{% url 'book_appointment' doctor.id %}" class="book-button">
+                Записаться на приём
+            </a>
+            {% else %}
+            <a href="{% url 'login' %}" class="book-button">
+                Войдите, чтобы записаться
+            </a>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="reviews-section">
+
+    <h2 class="reviews-title">Отзывы о враче</h2>
+
+    {% for review in reviews %}
+    <div class="review-card">
+        <h3 class="review-patient">{{ review.patient.username }}</h3>
+        <p class="review-rating">Оценка: {{ review.rating }}/5</p>
+        <p class="review-text">{{ review.text }}</p>
+    </div>
+    {% empty %}
+    <p class="empty-reviews">Пока отзывов нет.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+    <form method="POST" action="{% url 'add_review' doctor.id %}" class="review-form">
+        {% csrf_token %}
+
+        <label>Оценка</label>
+        <select name="rating" class="review-select" required>
+            <option value="5">5 - Отлично</option>
+            <option value="4">4 - Хорошо</option>
+            <option value="3">3 - Нормально</option>
+            <option value="2">2 - Плохо</option>
+            <option value="1">1 - Очень плохо</option>
+        </select>
+
+        <label>Ваш отзыв</label>
+        <textarea name="text" class="review-textarea" required></textarea>
+
+        <button type="submit" class="review-button">Оставить отзыв</button>
+    </form>
+    {% else %}
+    <p>Чтобы оставить отзыв, войдите в аккаунт.</p>
+    {% endif %}
+
+</section>
+
+{% endblock %}

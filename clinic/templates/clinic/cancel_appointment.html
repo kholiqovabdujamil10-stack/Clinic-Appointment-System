@@ -1,0 +1,35 @@
+{% extends 'clinic/base.html' %}
+
+{% block title %}Отмена записи | Clinic{% endblock %}
+
+{% block content %}
+
+<section class="cancel-section">
+
+    <div class="cancel-card">
+
+        <h1 class="cancel-title">Отмена записи</h1>
+
+        <p class="cancel-description">
+            Вы действительно хотите отменить запись?
+        </p>
+
+        <div class="cancel-info">
+            <p class="cancel-doctor">Врач: {{ appointment.doctor_id.name }}</p>
+            <p class="cancel-date">Дата: {{ appointment.appointment_date }}</p>
+            <p class="cancel-status">Статус: {{ appointment.status }}</p>
+        </div>
+
+        <form method="POST" class="cancel-form">
+            {% csrf_token %}
+
+            <button type="submit" class="confirm-cancel-btn">Да, отменить</button>
+
+            <a href="{% url 'my_appointments' %}" class="back-button">Назад</a>
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

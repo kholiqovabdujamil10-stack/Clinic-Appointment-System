@@ -1,0 +1,209 @@
+{% extends 'clinic/base.html' %}
+
+{% block title %}Главная | Clinic{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="hero-content">
+        <div class="medical-badge">✚ Забота о вашем здоровье</div>
+
+        <h1>Ваше здоровье — <span>наша главная забота</span></h1>
+
+        <p>
+            Найдите опытного врача, выберите удобное время
+            и запишитесь на приём онлайн.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="#doctors" class="btn-primary">Найти врача</a>
+
+            {% if user.is_authenticated %}
+            <a href="{% url 'my_appointments' %}" class="btn-secondary">Мои записи</a>
+            {% else %}
+            <a href="{% url 'registration' %}" class="btn-secondary">Регистрация</a>
+            {% endif %}
+        </div>
+
+        <div class="hero-features">
+            <div>
+                <strong>Опытные врачи</strong>
+                <span>Профессиональная команда</span>
+            </div>
+            <div>
+                <strong>Онлайн-запись</strong>
+                <span>Быстро и удобно</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-visual">
+        <div class="hero-circle">
+            <div class="hero-medical-icon">✚</div>
+            <div class="hero-small-circle">♡</div>
+        </div>
+        <div class="hero-floating-card">
+            <span>✓</span>
+            <div>
+                <strong>Clinic</strong>
+                <small>Забота о каждом</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="statistics">
+    <div class="stat-item">
+        <span class="stat-icon">✚</span>
+        <div>
+            <h3>Специалисты</h3>
+            <p>Разные направления медицины</p>
+        </div>
+    </div>
+
+    <div class="stat-item">
+        <span class="stat-icon">♡</span>
+        <div>
+            <h3>Забота о пациентах</h3>
+            <p>Внимание к каждому человеку</p>
+        </div>
+    </div>
+
+    <div class="stat-item">
+        <span class="stat-icon">✓</span>
+        <div>
+            <h3>Удобная запись</h3>
+            <p>Запись через интернет</p>
+        </div>
+    </div>
+</section>
+
+<section class="doctors-section" id="doctors">
+    <div class="section-heading">
+        <div>
+            <span class="section-label">НАША КОМАНДА</span>
+            <h2>Наши врачи</h2>
+            <p>Выберите специалиста для консультации.</p>
+        </div>
+    </div>
+
+    <form method="GET" class="doctor-search-form">
+        <div class="search-box">
+            <span>⌕</span>
+            <input type="text" name="q" value="{{ query }}" placeholder="Поиск врача..." class="search-input">
+        </div>
+
+        <select name="specialization" class="filter-select">
+            <option value="">Все специализации</option>
+            {% for specialization in specializations %}
+            <option value="{{ specialization.id }}">
+                {{ specialization.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <select name="sort" class="filter-select">
+            <option value="">Сортировка</option>
+            <option value="experience_low">Сначала с меньшим опытом</option>
+            <option value="experience_high">Сначала с большим опытом</option>
+        </select>
+
+        <button type="submit" class="search-button">Найти</button>
+    </form>
+
+    <div class="doctors-grid">
+        {% for doctor in doctors %}
+        <div class="doctor-card">
+            <div class="doctor-image-wrapper">
+                {% if doctor.image %}
+                <img src="{{ doctor.image.url }}" alt="{{ doctor.name }}" class="doctor-image">
+                {% else %}
+                <div class="doctor-no-image">✚</div>
+                {% endif %}
+                <span class="doctor-status">Специалист</span>
+            </div>
+
+            <div class="doctor-card-content">
+                <span class="doctor-specialization">
+                    {{ doctor.specialization_id.name }}
+                </span>
+
+                <h3>{{ doctor.name }}</h3>
+
+                <div class="doctor-experience">
+                    <span>◷</span>
+                    Опыт работы: {{ doctor.experience }} лет
+                </div>
+
+                <p class="doctor-description">
+                    {{ doctor.description|truncatewords:20 }}
+                </p>
+
+                <a href="{% url 'doctor_detail' doctor.id %}" class="doctor-button">
+                    Подробнее о враче <span>→</span>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-doctors">
+            <div class="empty-icon">✚</div>
+            <h3>Врачи не найдены</h3>
+            <p>Попробуйте изменить поисковый запрос или специализацию.</p>
+            <a href="{% url 'home' %}" class="btn-primary">Показать всех врачей</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="why-us">
+    <div class="why-us-content">
+        <span class="section-label">ПОЧЕМУ ВЫБИРАЮТ НАС</span>
+        <h2>Здоровье начинается с правильного выбора</h2>
+        <p>
+            Наша платформа помогает найти специалиста
+            и удобно организовать посещение врача.
+        </p>
+
+        <div class="why-us-list">
+            <div class="why-us-item">
+                <span>✓</span>
+                <div>
+                    <strong>Удобная запись</strong>
+                    <p>Записывайтесь к врачу через сайт.</p>
+                </div>
+            </div>
+
+            <div class="why-us-item">
+                <span>✓</span>
+                <div>
+                    <strong>Информация о врачах</strong>
+                    <p>Узнавайте специализацию и опыт специалистов.</p>
+                </div>
+            </div>
+
+            <div class="why-us-item">
+                <span>✓</span>
+                <div>
+                    <strong>Личный кабинет</strong>
+                    <p>Управляйте своими записями.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="why-us-visual">
+        <div class="why-us-symbol">✚</div>
+        <div class="why-us-circle"></div>
+    </div>
+</section>
+
+<section class="bottom-banner">
+    <div>
+        <span class="section-label">ВАШЕ ЗДОРОВЬЕ ВАЖНО</span>
+        <h2>Найдите своего врача уже сегодня</h2>
+        <p>Выберите специалиста и запишитесь на удобное время.</p>
+    </div>
+    <a href="#doctors" class="banner-button">Выбрать врача →</a>
+</section>
+
+{% endblock %}

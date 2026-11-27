@@ -1,0 +1,54 @@
+{% extends 'clinic/base.html' %}
+
+{% block title %}Мой профиль | Clinic{% endblock %}
+
+{% block content %}
+
+<section class="profile-section">
+
+    <div class="profile-card">
+
+        <h1 class="profile-title">Мой профиль</h1>
+
+        <div class="profile-info">
+            <p class="profile-name">Имя пользователя: {{ user.username }}</p>
+            <p class="profile-email">Email: {{ user.email }}</p>
+        </div>
+
+        <a href="{% url 'edit_profile' %}" class="profile-button">Изменить профиль</a>
+
+    </div>
+
+    <div class="profile-appointments">
+
+        <h2 class="appointments-title">Мои записи</h2>
+
+        {% for appointment in appointments %}
+
+        <div class="appointment-card">
+            <h3 class="appointment-doctor">{{ appointment.doctor_id.name }}</h3>
+
+            <p class="appointment-date">Дата: {{ appointment.appointment_date }}</p>
+
+            <p class="appointment-reason">Причина: {{ appointment.reason }}</p>
+
+            <p class="appointment-status">Статус: {{ appointment.status }}</p>
+
+            <a href="{% url 'cancel_appointment' appointment.id %}" class="cancel-button">
+                Отменить запись
+            </a>
+        </div>
+
+        {% empty %}
+
+        <p class="empty-message">У вас пока нет записей.</p>
+
+        {% endfor %}
+
+        <a href="{% url 'my_appointments' %}" class="all-appointments-button">Все записи</a>
+
+    </div>
+
+</section>
+
+{% endblock %}

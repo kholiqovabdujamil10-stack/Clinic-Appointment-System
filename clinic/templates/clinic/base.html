@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Clinic{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-container">
+            <a href="{% url 'home' %}" class="logo">Clinic</a>
+
+            <nav class="navigation">
+                <a href="{% url 'home' %}" class="nav-link">Главная</a>
+
+                {% if user.is_authenticated %}
+
+                {% if user.groups.all.0.name == 'Doctors' %}
+                <a href="{% url 'doctor_profile' %}" class="nav-link">Профиль</a>
+                {% else %}
+                <a href="{% url 'profile' %}" class="nav-link">Профиль</a>
+                {% endif %}
+
+                <a href="{% url 'logout' %}" class="nav-link">Выйти</a>
+
+                {% else %}
+                <a href="{% url 'login' %}" class="nav-link">Войти</a>
+                <a href="{% url 'registration' %}" class="nav-link">Регистрация</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">© 2026 Clinic. Все права защищены.</p>
+    </footer>
+
+</body>
+
+</html>

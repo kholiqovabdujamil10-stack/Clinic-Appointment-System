@@ -1,0 +1,32 @@
+{% extends 'clinic/base.html' %}
+
+{% block title %}Запись на приём | Clinic{% endblock %}
+
+{% block content %}
+
+<section class="booking-section">
+
+    <form method="POST" class="booking-form">
+        {% csrf_token %}
+
+        <h1 class="form-title">Запись на приём</h1>
+
+        <h2 class="booking-doctor-name">{{ doctor.name }}</h2>
+
+        <div class="form-group">
+            <label class="form-label">Дата и время</label>
+            <input type="datetime-local" name="appointment_date" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Причина обращения</label>
+            <textarea name="reason" class="form-textarea" placeholder="Опишите причину обращения" required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Записаться</button>
+
+    </form>
+
+</section>
+
+{% endblock %}

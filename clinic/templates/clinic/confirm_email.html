@@ -1,0 +1,35 @@
+{% extends 'clinic/base.html' %}
+
+{% block title %}Подтверждение почты | Clinic{% endblock %}
+
+{% block content %}
+
+<div class="auth-container">
+
+    <form method="POST" class="auth-form">
+        {% csrf_token %}
+
+        <h1 class="form-title">Подтверждение почты</h1>
+
+        <p class="form-description">
+            Введите имя пользователя и код, который пришёл на вашу почту.
+        </p>
+
+        <div class="form-group">
+            <label class="form-label">Имя пользователя</label>
+            <input type="text" name="username" class="form-input" placeholder="Введите имя пользователя" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Код подтверждения</label>
+            <input type="text" name="code" class="form-input" placeholder="Введите 6-значный код" maxlength="6"
+                required>
+        </div>
+
+        <button type="submit" class="submit-btn">Подтвердить</button>
+
+    </form>
+
+</div>
+
+{% endblock %}

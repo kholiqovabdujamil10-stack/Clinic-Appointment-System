@@ -1,0 +1,40 @@
+{% extends 'clinic/base.html' %}
+
+{% block title %}Регистрация | Clinic{% endblock %}
+
+{% block content %}
+
+<div class="auth-container">
+
+    <form method="POST" class="auth-form">
+        {% csrf_token %}
+
+        <h1 class="form-title">Регистрация</h1>
+
+        <div class="form-group">
+            <label class="form-label">Имя пользователя</label>
+            <input type="text" name="username" class="form-input" placeholder="Введите имя пользователя" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Электронная почта</label>
+            <input type="email" name="email" class="form-input" placeholder="Введите email" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Пароль</label>
+            <input type="password" name="password" class="form-input" placeholder="Введите пароль" required>
+        </div>
+
+        <button type="submit" class="submit-btn">Зарегистрироваться</button>
+
+        <p class="form-text">
+            Уже есть аккаунт?
+            <a href="{% url 'login' %}" class="form-link">Войти</a>
+        </p>
+
+    </form>
+
+</div>
+
+{% endblock %}

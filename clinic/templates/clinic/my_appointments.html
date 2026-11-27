@@ -1,0 +1,59 @@
+{% extends 'clinic/base.html' %}
+
+{% block title %}Мои записи | Clinic{% endblock %}
+
+{% block content %}
+
+<section class="appointments-section">
+
+    <h1 class="page-title">Мои записи</h1>
+
+    <form method="GET" class="appointments-search-form">
+
+        <input type="text" name="query" value="{{ data }}" placeholder="Поиск по врачу или причине"
+            class="search-input">
+
+        <select name="status" class="filter-select">
+            <option value="">Все статусы</option>
+            <option value="Pending" {% if status == 'Pending' %}selected{% endif %}>Ожидает</option>
+            <option value="Confirmed" {% if status == 'Confirmed' %}selected{% endif %}>Подтверждена</option>
+            <option value="Cancelled" {% if status == 'Cancelled' %}selected{% endif %}>Отменена</option>
+        </select>
+
+        <button type="submit" class="search-button">Найти</button>
+
+    </form>
+
+    <div class="appointments-list">
+
+        {% for appointment in appointments %}
+
+        <div class="appointment-card">
+
+            <h2 class="appointment-doctor">{{ appointment.doctor_id.name }}</h2>
+
+            <p class="appointment-date">Дата: {{ appointment.appointment_date }}</p>
+
+            <p class="appointment-reason">Причина: {{ appointment.reason }}</p>
+
+            <p class="appointment-status">Статус: {{ appointment.status }}</p>
+
+            {% if appointment.status != 'Cancelled' %}
+            <a href="{% url 'cancel_appointment' appointment.id %}" class="cancel-button">
+                Отменить запись
+            </a>
+            {% endif %}
+
+        </div>
+
+        {% empty %}
+
+        <p class="empty-message">Записей не найдено.</p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}
